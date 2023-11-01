@@ -1,4 +1,5 @@
 import React from 'react';
+import './App.css';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -8,7 +9,7 @@ import Remaining from './components/Remaining';
 import ExpenseTotal from './components/ExpenseTotal';
 import ExpenseList from './components/ExpenseList';
 import AllocationForm from './components/AllocationForm';
-
+import CurrencyDropdown from './components/CurrencyDropdown';
 // Add code to import the other components here under
 
 
@@ -38,8 +39,13 @@ const App = () => {
                             <div className='col-sm'>
                                 <ExpenseTotal />
                             </div>                            /* Add ExpenseTotal component here */
-                        }        
+                        }  
+                            
                     </div>
+                    { <div className='col-sm md-1'>
+                                <CurrencyDropdown />
+                            </div> 
+                        }
                         <div>
                             <h3 className='mt-3'>Allocation</h3>
                             <div className='row '>
