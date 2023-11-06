@@ -98,18 +98,8 @@ export const AppContext = createContext();
 // 3. Provider component - wraps the components we want to give access to the state
 // Accepts the children, which are the nested(wrapped) components
 export const AppProvider = (props) => {
-const [budgetalloc, setBudget] = useState(initialState);
 
-
-  useEffect(() => {
-    const json = localStorage.getItem("budgetalloc");
-    const loadedBudget = JSON.parse(json);
-    if (loadedBudget) {
-      setBudget(loadedBudget);
-    }
-  }, []);
-
-const [state, dispatch] = useReducer(AppReducer, [],(initial) => JSON.parse(localStorage.getItem("budgetalloc")) || initial);
+const [state, dispatch] = useReducer(AppReducer, [],() => JSON.parse(localStorage.getItem("budgetalloc")) || initialState);
     let remaining = 0;
 
 useEffect(() => {
