@@ -89,12 +89,6 @@ const initialState = {
     currency: '£'
 };
 
-// 2. Creates the context this is the thing our components import and use to get the state
-export const AppContext = createContext();
-
-// 3. Provider component - wraps the components we want to give access to the state
-// Accepts the children, which are the nested(wrapped) components
-export const AppProvider = (props) => {
 const [budgetalloc, setBudget] = useState(initialState);
 
 
@@ -104,29 +98,6 @@ const [budgetalloc, setBudget] = useState(initialState);
     if (loadedBudget) {
       setBudget(loadedBudget);
     }
-const [state, dispatch] = useReducer(AppReducer, budgetalloc);
-    let remaining = 0;
-
-    if (state.expenses) {
-            const totalExpenses = state.expenses.reduce((total, item) => {
-            return (total = total + item.cost);
-        }, 0);
-        remaining = state.budget - totalExpenses;
-    }
-
-    return (
-        <AppContext.Provider
-            value={{
-                expenses: state.expenses,
-                budget: state.budget,
-                remaining: remaining,
-                dispatch,
-                currency: state.currency
-            }}
-        >
-            {props.children}
-        </AppContext.Provider>
-    );
   }, []);
 
 useEffect(() => {
@@ -134,6 +105,15 @@ useEffect(() => {
         const json = JSON.stringify(budgetalloc);
         localStorage.setItem("budgetalloc", json);
     }
+  }, [budgetalloc]);
+// 2. Creates the context this is the thing our components import and use to get the state
+export const AppContext = createContext();
+
+// 3. Provider component - wraps the components we want to give access to the state
+// Accepts the children, which are the nested(wrapped) components
+export const AppProvider = (props) => {
+
+    // 4. Sets up the app state. takes a reducer, and an initial state
 const [state, dispatch] = useReducer(AppReducer, budgetalloc);
     let remaining = 0;
 
@@ -157,7 +137,5 @@ const [state, dispatch] = useReducer(AppReducer, budgetalloc);
             {props.children}
         </AppContext.Provider>
     );
-  }, [budgetalloc]);
-    // 4. Sets up the app state. takes a reducer, and an initial state
     
 };
