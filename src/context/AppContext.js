@@ -2,6 +2,23 @@ import React, { createContext, useReducer , useState , useEffect} from 'react';
 
 // 5. The reducer - this is used to update the state, based on the action
 export const AppReducer = (state, action) => {
+const [budgetalloc, setBudget] = useState(state);
+
+
+  useEffect(() => {
+    const json = localStorage.getItem("budgetalloc");
+    const loadedBudget = JSON.parse(json);
+    if (loadedBudget) {
+      setBudget(loadedBudget);
+    }
+  }, []);
+
+useEffect(() => {
+    if(budgetalloc.length > 0) {
+        const json = JSON.stringify(budgetalloc);
+        localStorage.setItem("budgetalloc", json);
+    }
+  }, [budgetalloc]);
     let budget = 0;
     switch (action.type) {
         case 'ADD_EXPENSE':
@@ -21,11 +38,13 @@ export const AppReducer = (state, action) => {
                     }
                     return currentExp
                 });
+setBudget({...state,});
                 return {
                     ...state,
                 };
             } else {
                 alert("Cannot increase the allocation! Out of funds");
+
                 return {
                     ...state
                 }
@@ -39,6 +58,7 @@ export const AppReducer = (state, action) => {
                     return currentExp
                 })
                 action.type = "DONE";
+setBudget({...state,expenses:[...red_expenses],});
                 return {
                     ...state,
                     expenses: [...red_expenses],
@@ -53,6 +73,7 @@ export const AppReducer = (state, action) => {
                 return currentExp
             })
             action.type = "DONE";
+setBudget({...state,budget});
             return {
                 ...state,
                 budget
@@ -60,18 +81,20 @@ export const AppReducer = (state, action) => {
         case 'SET_BUDGET':
             action.type = "DONE";
             state.budget = action.payload;
-
+setBudget({...state,});
             return {
                 ...state,
             };
         case 'CHG_CURRENCY':
             action.type = "DONE";
             state.currency = action.payload;
+setBudget({...state,});
             return {
                 ...state
             }
 
         default:
+setBudget({...state,});
             return state;
     }
 };
@@ -89,23 +112,6 @@ const initialState = {
     currency: '£'
 };
 
-const [budgetalloc, setBudget] = useState(initialState);
-
-
-  useEffect(() => {
-    const json = localStorage.getItem("budgetalloc");
-    const loadedBudget = JSON.parse(json);
-    if (loadedBudget) {
-      setBudget(loadedBudget);
-    }
-  }, []);
-
-useEffect(() => {
-    if(budgetalloc.length > 0) {
-        const json = JSON.stringify(budgetalloc);
-        localStorage.setItem("budgetalloc", json);
-    }
-  }, [budgetalloc]);
 // 2. Creates the context this is the thing our components import and use to get the state
 export const AppContext = createContext();
 
