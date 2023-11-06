@@ -120,7 +120,7 @@ export const AppContext = createContext();
 export const AppProvider = (props) => {
 
     // 4. Sets up the app state. takes a reducer, and an initial state
-const [state, dispatch] = useReducer(AppReducer, budgetalloc);
+const [state, dispatch] = useReducer(AppReducer, initialState);
     let remaining = 0;
 
     if (state.expenses) {
