@@ -103,10 +103,9 @@ const [state, dispatch] = useReducer(AppReducer, [],() => JSON.parse(localStorag
     let remaining = 0;
 
 useEffect(() => {
-    if(state.length > 0) {
         const json = JSON.stringify(state);
         localStorage.setItem("budgetalloc", json);
-    }
+    
   }, [state]);
 
     // 4. Sets up the app state. takes a reducer, and an initial state
