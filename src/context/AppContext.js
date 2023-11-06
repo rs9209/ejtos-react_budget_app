@@ -2,23 +2,9 @@ import React, { createContext, useReducer , useState , useEffect} from 'react';
 
 // 5. The reducer - this is used to update the state, based on the action
 export const AppReducer = (state, action) => {
-const [budgetalloc, setBudget] = useState();
 
 
-  useEffect(() => {
-    const json = localStorage.getItem("budgetalloc");
-    const loadedBudget = JSON.parse(json);
-    if (loadedBudget) {
-      setBudget(loadedBudget);
-    }
-  }, []);
 
-useEffect(() => {
-    if(budgetalloc.length > 0) {
-        const json = JSON.stringify(budgetalloc);
-        localStorage.setItem("budgetalloc", json);
-    }
-  }, [budgetalloc]);
     let budget = 0;
     switch (action.type) {
         case 'ADD_EXPENSE':
@@ -38,7 +24,6 @@ useEffect(() => {
                     }
                     return currentExp
                 });
-setBudget({...state,});
                 return {
                     ...state,
                 };
@@ -58,7 +43,6 @@ setBudget({...state,});
                     return currentExp
                 })
                 action.type = "DONE";
-setBudget({...state,expenses:[...red_expenses],});
                 return {
                     ...state,
                     expenses: [...red_expenses],
@@ -73,7 +57,6 @@ setBudget({...state,expenses:[...red_expenses],});
                 return currentExp
             })
             action.type = "DONE";
-setBudget({...state,budget});
             return {
                 ...state,
                 budget
@@ -81,20 +64,17 @@ setBudget({...state,budget});
         case 'SET_BUDGET':
             action.type = "DONE";
             state.budget = action.payload;
-setBudget({...state,});
             return {
                 ...state,
             };
         case 'CHG_CURRENCY':
             action.type = "DONE";
             state.currency = action.payload;
-setBudget({...state,});
             return {
                 ...state
             }
 
         default:
-setBudget({...state,});
             return state;
     }
 };
@@ -118,10 +98,29 @@ export const AppContext = createContext();
 // 3. Provider component - wraps the components we want to give access to the state
 // Accepts the children, which are the nested(wrapped) components
 export const AppProvider = (props) => {
+const [budgetalloc, setBudget] = useState(initialState);
+
+
+  useEffect(() => {
+    const json = localStorage.getItem("budgetalloc");
+    const loadedBudget = JSON.parse(json);
+    if (loadedBudget) {
+      setBudget(loadedBudget);
+    }
+  }, []);
+
+const [state, dispatch] = useReducer(AppReducer, budgetalloc);
+    let remaining = 0;
+
+useEffect(() => {
+    if(state.length > 0) {
+        const json = JSON.stringify(state);
+        localStorage.setItem("budgetalloc", json);
+    }
+  }, [state]);
 
     // 4. Sets up the app state. takes a reducer, and an initial state
-const [state, dispatch] = useReducer(AppReducer, initialState);
-    let remaining = 0;
+
 
     if (state.expenses) {
             const totalExpenses = state.expenses.reduce((total, item) => {
