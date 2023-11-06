@@ -15,6 +15,7 @@ import CurrencyDropdown from './components/CurrencyDropdown';
 
 import { AppProvider } from './context/AppContext';
 const App = () => {
+  
     return (
         <AppProvider>
             <div className='container'>
