@@ -109,7 +109,7 @@ const [budgetalloc, setBudget] = useState(initialState);
     }
   }, []);
 
-const [state, dispatch] = useReducer(AppReducer, budgetalloc,(initial) => localStorage.getItem("budgetalloc") || initial);
+const [state, dispatch] = useReducer(AppReducer, [],(initial) => localStorage.getItem("budgetalloc") || initial);
     let remaining = 0;
 
 useEffect(() => {
