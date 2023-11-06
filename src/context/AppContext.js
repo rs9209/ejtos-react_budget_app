@@ -104,16 +104,7 @@ const [budgetalloc, setBudget] = useState(initialState);
     if (loadedBudget) {
       setBudget(loadedBudget);
     }
-  }, []);
-
-useEffect(() => {
-    if(budgetalloc.length > 0) {
-        const json = JSON.stringify(budgetalloc);
-        localStorage.setItem("budgetalloc", json);
-    }
-  }, [budgetalloc]);
-    // 4. Sets up the app state. takes a reducer, and an initial state
-    const [state, dispatch] = useReducer(AppReducer, budgetalloc);
+const [state, dispatch] = useReducer(AppReducer, budgetalloc);
     let remaining = 0;
 
     if (state.expenses) {
@@ -136,4 +127,37 @@ useEffect(() => {
             {props.children}
         </AppContext.Provider>
     );
+  }, []);
+
+useEffect(() => {
+    if(budgetalloc.length > 0) {
+        const json = JSON.stringify(budgetalloc);
+        localStorage.setItem("budgetalloc", json);
+    }
+const [state, dispatch] = useReducer(AppReducer, budgetalloc);
+    let remaining = 0;
+
+    if (state.expenses) {
+            const totalExpenses = state.expenses.reduce((total, item) => {
+            return (total = total + item.cost);
+        }, 0);
+        remaining = state.budget - totalExpenses;
+    }
+
+    return (
+        <AppContext.Provider
+            value={{
+                expenses: state.expenses,
+                budget: state.budget,
+                remaining: remaining,
+                dispatch,
+                currency: state.currency
+            }}
+        >
+            {props.children}
+        </AppContext.Provider>
+    );
+  }, [budgetalloc]);
+    // 4. Sets up the app state. takes a reducer, and an initial state
+    
 };
